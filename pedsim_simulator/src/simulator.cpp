@@ -113,6 +113,8 @@ bool Simulator::initializeSimulation() {
   nh_.param<double>("max_robot_speed", CONFIG.max_robot_speed, 1.5);
   nh_.param<double>("update_rate", CONFIG.updateRate, 25.0);
   nh_.param<double>("simulation_factor", CONFIG.simulationFactor, 1.0);
+  nh_.param<double>("simulation_factor", CONFIG.simulationFactor, 1.0);
+  nh_.param<double>("spawn_timer", CONFIG.spawnTimer, 5.0);
 
   int op_mode = 1;
   nh_.param<int>("robot_mode", op_mode, 1);
@@ -121,7 +123,7 @@ bool Simulator::initializeSimulation() {
   paused_ = false;
 
   spawn_timer_ =
-      nh_.createTimer(ros::Duration(5.0), &Simulator::spawnCallback, this);
+      nh_.createTimer(ros::Duration(CONFIG.spawnTimer), &Simulator::spawnCallback, this);
 
   return true;
 }
@@ -174,6 +176,11 @@ void Simulator::reconfigureCB(pedsim_simulator::PedsimSimulatorConfig& config,
   if (paused_ != config.paused) {
     paused_ = config.paused;
   }
+  
+  if(config.spawn_timer != CONFIG.spawnTimer){
+    CONFIG.spawnTimer = config.spawn_timer;
+    spawn_timer_.setPeriod(ros::Duration(CONFIG.spawnTimer), true);
+  }
 
   ROS_INFO_STREAM("Updated sim with live config: Rate=" << CONFIG.updateRate
                                                         << " incoming rate="
@@ -214,7 +221,7 @@ void Simulator::updateRobotPositionFromTF() {
   if (CONFIG.robot_mode == RobotMode::TELEOPERATION ||
       CONFIG.robot_mode == RobotMode::CONTROLLED) {
     robot_->setTeleop(true);
-    robot_->setVmax(2 * CONFIG.max_robot_speed);
+    robot_->setVmax(CONFIG.max_robot_speed);
 
     // Get robot position via TF
     tf::StampedTransform tfTransform;
@@ -239,15 +246,10 @@ void Simulator::updateRobotPositionFromTF() {
     if (!std::isfinite(vx)) vx = 0;
     if (!std::isfinite(vy)) vy = 0;
 
-    ROS_DEBUG_STREAM("rx, ry: " << robot_->getx() << ", " << robot_->gety() << " vs: " << x << ", " << y);
-
     robot_->setX(x);
     robot_->setY(y);
     robot_->setvx(vx);
     robot_->setvy(vy);
-
-
-    ROS_DEBUG_STREAM("Robot speed: " << std::hypot(vx, vy) << " dt: " << dt);
 
     last_robot_pose_ = tfTransform;
   }
@@ -301,8 +303,6 @@ void Simulator::publishAgents() {
     state.pose.position.x = a->getx();
     state.pose.position.y = a->gety();
     state.pose.position.z = a->getz();
-    auto theta = std::atan2(a->getvy(), a->getvx());
-    state.pose.orientation = pedsim::angleToQuaternion(theta);
 
     state.twist.linear.x = a->getvx();
     state.twist.linear.y = a->getvy();

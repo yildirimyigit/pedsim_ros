@@ -47,6 +47,8 @@ Config::Config(QObject* parent) {
   forceGroupRepulsion = 1.0;
   forceRandom = 0.1;
   forceAlongWall = 2.0;
+  
+  spawnTimer = 5.0;
 
   cell_width = 1.0;
   cell_height = 1.0;

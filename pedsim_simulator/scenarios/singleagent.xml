@@ -10,8 +10,8 @@
     <!-- <obstacle x1="19.5" y1="14.5" x2="19.5" y2="4.5"/> --> 
 
     <!--Waypoints (incl. WaitingQueues)-->
-    <waypoint id="enter_bookshop" x="12" y="14" r="2"/>
-    <waypoint id="leave_bookshop" x="12" y="2" r="2"/>
+    <waypoint id="enter_bookshop" x="16" y="10" r="0.1"/>
+    <waypoint id="leave_bookshop" x="4" y="10" r="0.1"/>
 
     <waypoint id="enter_mcdonald" x="16" y="14" r="2"/>
     <waypoint id="leave_mcdonald" x="16" y="2" r="2"/>
@@ -30,9 +30,13 @@
 
 
         <!--AgentClusters-->
-    <agent x="6.8" y="6.2" n="1" dx="1" dy="1" type="3">
+    <agent x="4" y="10" n="1" dx="1" dy="1" type="3">
         <addwaypoint id="enter_bookshop"/>
         <addwaypoint id="leave_bookshop"/>
+    </agent>
+    <agent x="16" y="10" n="1" dx="1" dy="1" type="3">
+        <addwaypoint id="leave_bookshop"/>
+        <addwaypoint id="enter_bookshop"/>
     </agent>
 
     

@@ -129,6 +129,19 @@ install(
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+### Yigit added
+add_executable(simulate_omni_drive_robot src/simulate_omni_drive_robot.cpp)
+add_dependencies(simulate_omni_drive_robot ${catkin_EXPORTED_TARGETS})
+target_link_libraries(simulate_omni_drive_robot ${BOOST_LIBRARIES} ${catkin_LIBRARIES})
+
+install(
+  TARGETS
+    ${EXECUTABLE_NAME}
+    simulate_omni_drive_robot
+  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
+  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
 
 
 ## Unit Tests
