@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="humanbody">
+
+    <link name="link">
+      <pose>0 0 0.05 0 0 1.57</pose>
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>18.75</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>18.75</iyy>
+          <iyz>0</iyz>
+          <izz>18.75</izz>
+        </inertia>
+      </inertial>
+
+
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.1 0.1 2.25</size>
+          </box>
+        </geometry>
+        <surface>
+          <contact>
+            <poissons_ratio>0.347</poissons_ratio>
+            <elastic_modulus>8.8e+09</elastic_modulus>
+            <ode>
+              <kp>100000</kp>
+              <kd>100</kd>
+              <max_vel>100.0</max_vel>
+              <min_depth>0.001</min_depth>
+            </ode>
+          </contact>
+          <friction>
+            <ode>
+                <mu>100000</mu>
+                <mu2>100000</mu2>
+                <fdir1>0 0 0</fdir1>
+                <slip1>0</slip1>
+                <slip2>0</slip2>
+              </ode>
+            <torsional>
+              <coefficient>1.0</coefficient>
+              <use_patch_radius>0</use_patch_radius>
+              <surface_radius>0.01</surface_radius>
+            </torsional>
+          </friction>
+        </surface>
+      </collision>
+
+
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>model://humanbody/meshes/Human.dae</uri>
+            <scale>0.4 0.3 0.4</scale>
+          </mesh>
+        </geometry>
+      </visual>
+
+
+    </link>
+    <static>false</static>
+  </model>
+</sdf>
