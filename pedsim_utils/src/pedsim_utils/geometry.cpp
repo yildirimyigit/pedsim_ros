@@ -49,13 +49,13 @@ std::vector<std::pair<float, float>> LineObstacleToCells(const float x1,
                                                          const float y2) {
   int i;             // loop counter
   int ystep, xstep;  // the step on y and x axis
-  int error;         // the error accumulated during the increment
-  int errorprev;     // *vision the previous value of the error variable
-  int y = y1 - 0.5, x = x1 - 0.5;  // the line points
+  double error;         // the error accumulated during the increment
+  double errorprev;     // *vision the previous value of the error variable
+  double y = y1 - 0.5, x = x1 - 0.5;  // the line points
   // int y = y1, x = x1;  // the line points
-  int ddy, ddx;        // compulsory variables: the double values of dy and dx
-  int dx = x2 - x1;
-  int dy = y2 - y1;
+  double ddy, ddx;        // compulsory variables: the double values of dy and dx
+  double dx = x2 - x1;
+  double dy = y2 - y1;
   double unit_x, unit_y;
   unit_x = 1;
   unit_y = 1;
@@ -77,13 +77,23 @@ std::vector<std::pair<float, float>> LineObstacleToCells(const float x1,
   ddx = 2 * dx;
 
   std::vector<std::pair<float, float>> obstacle_cells;  // TODO - reserve.
+  
+  if(ddx >= ddy){
+    y += 0.5;
+    x += 0.5;
+  }
+  else{
+    y += 0.5;
+    x += 0.5;
+  }
+  
   obstacle_cells.emplace_back(std::make_pair(x, y));
 
   if (ddx >= ddy) {
     // first octant (0 <= slope <= 1)
     // compulsory initialization (even for errorprev, needed when dx==dy)
     errorprev = error = dx;  // start in the middle of the square
-    for (i = 0; i < dx; i++) {
+    for (i = 1; i < dx; i++) {
       // do not use the first point (already done)
       x += xstep;
       error += ddy;
@@ -111,7 +121,7 @@ std::vector<std::pair<float, float>> LineObstacleToCells(const float x1,
   } else {
     // the same as above
     errorprev = error = dy;
-    for (i = 0; i < dy; i++) {
+    for (i = 1; i < dy; i++) {
       y += ystep;
       error += ddx;
       if (error > ddy) {
