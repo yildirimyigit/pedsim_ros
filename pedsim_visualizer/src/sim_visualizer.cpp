@@ -165,15 +165,12 @@ void SimVisualizer::publishObstacleVisuals() {
   walls_marker.type = visualization_msgs::Marker::CUBE_LIST;
 
   for (const auto& line : current_obstacles->obstacles) {
-    //ROS_INFO("1: %f, %f, %f, %f", line.start.x, line.start.y, line.end.x, line.end.y);
     for (const auto& cell : LineObstacleToCells(line.start.x, line.start.y,
                                                 line.end.x, line.end.y)) {
-      
       geometry_msgs::Point p;
       p.x = cell.first;
       p.y = cell.second;
       p.z = 0.0;
-      //ROS_INFO("2: %f, %f", p.x, p.y);
       walls_marker.points.push_back(p);
     }
   }
