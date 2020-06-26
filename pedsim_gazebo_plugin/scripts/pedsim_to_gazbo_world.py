@@ -80,18 +80,35 @@ def generate_obstacle(x1, y1, x2, y2, idx):
     '''.format(1, 1)  # math.sqrt( pow(y2-y1,2) + pow(x2-x1,2)  ) )
 
 
+# Spawning a PR2 for each robot
+def generate_robot(x, y, id_robot):
+    print >> gzb_world, '''
+    <include>
+      <uri>model://PR2</uri>
+      <pose>{} {} 0 0 0 0</pose>
+      <static>true</static>
+    </include>
+    '''.format(x, y)
+
+
+
 def parseXML(xmlfile): 
     tree = ET.parse(xmlfile) 
     root = tree.getroot() 
     idx = 0
+    idr = 0
     for item in root:
         if item.tag == 'obstacle':
-            idx = idx+1
             x1 = item.attrib['x1']
             y1 = item.attrib['y1']
             x2 = item.attrib['x2']
             y2 = item.attrib['y2']
             generate_obstacle(float(x1), float(y1), float(x2), float(y2), idx)
+            idx = idx+1
+
+        elif item.tag == 'agent' and item.attrib['type'] == '2':
+            generate_robot(float(item.attrib['x']), float(item.attrib['y']), idr)
+            idr += 1
 
     
 def generate_gzb_world(pedsim_file_name):
@@ -132,7 +149,7 @@ def generate_gzb_world(pedsim_file_name):
     </sdf>
     
         '''
-    print "gazbo world has been generated: {}".format( gazebo_world)
+    print "gazebo world has been generated: {}".format(gazebo_world)
 
 
 def generate_launch_file(pedsim_file_name):

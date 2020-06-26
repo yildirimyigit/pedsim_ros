@@ -6,14 +6,16 @@
   <obstacle x1="0" y1="5" x2="30" y2="5"/>
   <obstacle x1="30" y1="0" x2="30" y2="5"/>
   
-  <obstacle x1="15.0" y1="2" x2="15.5" y2="2.0"/>
-  <obstacle x1="15.0" y1="2.0" x2="15.0" y2="1.5"/>
-  <obstacle x1="15.0" y1="1.5" x2="15.5" y2="1.5"/>
-  <obstacle x1="15.5" y1="1.5" x2="15.5" y2="2.0"/>
+  <!--obstacle x1="15.0" y1="1.5" x2="15.5" y2="2.0"/-->
 
   <waypoint id="east" x="2.0" y="2.5" r="1" b="1"/>
   <!-- Sinks -->
   <waypoint id="west" x="28.5" y="2.5" r="1" b="2"/>
+
+  <waypoint id="robot_pose" x="15.0" y="2" r="0"/>  
+  <agent x="15.0" y="2" n="1" dx="0" dy="0" type="2">
+    <addwaypoint id="robot_pose"/>
+  </agent>
 
   <!--AgentClusters-->
   <source x="2" y="2.5" n="1" dx="1.5" dy="1.5" type="0">
